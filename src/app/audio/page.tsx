@@ -1,6 +1,6 @@
 /**
- * LLM技术页面组件
- * 展示LLM相关的文章列表，包括文章标题、描述、日期和分类
+ * 音频技术页面组件
+ * 展示音频相关的文章列表，包括文章标题、描述、日期和分类
  * 使用响应式网格布局展示文章卡片
  * 支持分页功能，每页显示9条数据
  */
@@ -8,19 +8,19 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { llmArticles } from '../models/data';
+import { audioArticles } from '../models/data';
 import { getCachedImage, cacheImage, clearOldCache } from '../../utils/ImageCache';
 
-export default function LLMPage() {
+export default function AudioPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [cachedImages, setCachedImages] = useState<Record<string, string>>({});
   const itemsPerPage = 9;
   
   // 计算总页数
-  const totalPages = Math.ceil(llmArticles.length / itemsPerPage);
+  const totalPages = Math.ceil(audioArticles.length / itemsPerPage);
   
   // 获取当前页的数据
-  const currentItems = llmArticles.slice(
+  const currentItems = audioArticles.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -67,10 +67,10 @@ export default function LLMPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">LLM 技术</h1>
+      <h1 className="text-3xl font-bold mb-4">音频技术</h1>
       <div className="prose dark:prose-invert max-w-none">
         <p className="mb-4">
-          这里将会分享大语言模型（LLM）相关的技术内容和研究心得。
+          这里将会分享音频处理、语音合成和音乐生成等相关的技术内容和研究心得。
         </p>
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">文章列表</h2>
@@ -79,7 +79,7 @@ export default function LLMPage() {
               <div key={article.id} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                 <div className="relative h-48 w-full overflow-hidden">
                   <img 
-                    src={cachedImages[article.id] || (article.imageUrl ? article.imageUrl : `/images/llm-default.svg`)} 
+                    src={cachedImages[article.id] || (article.imageUrl ? `${article.imageUrl}?auto=format&fit=crop&w=800&q=80` : `/images/audio-default.svg`)}
                     alt={article.title}
                     className={`w-full h-full ${article.imageUrl || cachedImages[article.id] ? 'object-cover' : 'object-contain p-8'} transition-transform duration-500 hover:scale-105`}
                     loading="eager"
@@ -105,7 +105,7 @@ export default function LLMPage() {
                         
                         // 尝试使用原始URL
                         if (article.imageUrl) {
-                          target.src = article.imageUrl;
+                          target.src = `${article.imageUrl}?auto=format&fit=crop&w=800&q=80`;
                           return;
                         }
                       }
@@ -126,22 +126,22 @@ export default function LLMPage() {
                       }
                       
                       // 最终回退到默认图片
-                      if (target.src !== `/images/llm-default.svg`) {
+                      if (target.src !== `/images/audio-default.svg`) {
                         console.log('使用默认图片');
-                        target.src = `/images/llm-default.svg`;
+                        target.src = `/images/audio-default.svg`;
                       }
                     }}
                   />
                 </div>
                 <div className="p-4">
-                  <span className="inline-block px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full mb-2">
+                  <span className="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full mb-2">
                     {article.category}
                   </span>
                   <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-3">{article.description}</p>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500">{article.date}</span>
-                    <Link href={`/llm/${article.id}`} className="text-blue-600 dark:text-blue-400 hover:underline">阅读全文 →</Link>
+                    <Link href={`/audio/${article.id}`} className="text-blue-600 dark:text-blue-400 hover:underline">阅读全文 →</Link>
                   </div>
                 </div>
               </div>
